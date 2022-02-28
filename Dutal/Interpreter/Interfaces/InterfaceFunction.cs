@@ -1,6 +1,4 @@
 ﻿using Dutal.Interpreter.Evaluating;
-using System;
-
 
 namespace Dutal.Interpreter.Interfaces
 {

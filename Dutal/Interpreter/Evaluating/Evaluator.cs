@@ -33,71 +33,95 @@ namespace Dutal.Interpreter.Evaluating
             Registers  = new Registers(location);
             Parameters = new ParameterCache(location);
 
-            this.Variables  = variables;
-            this.Interfaces = interfaces;
+            Variables  = variables;
+            Interfaces = interfaces;
         }
 
         public void Evaluate(Node ast)
         {
-            if (ast is StatementList statementList)
-                StatementList(statementList);
+            switch(ast)
+            {
+                case StatementList statementList:
+                    StatementList(statementList);
+                    break;
 
-            else if (ast is ParameterList parameterList)
-                ParameterList(parameterList);
+                case ParameterList parameterList:
+                    ParameterList(parameterList);
+                    break;
 
-            else if (ast is Parameter)
-                Parameter();
+                case Parameter _ :
+                    Parameter();
+                    break;
 
-            else if (ast is AssignmentStatement assignmentStatement)
-                AssignmentStatement(assignmentStatement);
+                case AssignmentStatement assignment:
+                    AssignmentStatement(assignment);
+                    break;
 
-            else if (ast is UserDefinedFunctionDefinition userDefinedFunctionDefinition)
-                UserDefinedFunctionDefinition(userDefinedFunctionDefinition);
+                case UserDefinedFunctionDefinition definition:
+                    UserDefinedFunctionDefinition(definition);
+                    break;
 
-            else if (ast is UserDefinedFunctionCall userDefinedFunction)
-                UserDefinedFunction(userDefinedFunction);
+                case UserDefinedFunctionCall call:
+                    UserDefinedFunction(call);
+                    break;
 
-            else if (ast is InterfaceCall interfaceCall)
-                Interface(interfaceCall);
+                case InterfaceCall call:
+                    Interface(call);
+                    break;
 
-            else if (ast is FunctionCall function)
-                Function(function);
+                case FunctionCall call:
+                    Function(call);
+                    break;
 
-            else if (ast is ReturnStatement returnStatement)
-                ReturnStatement(returnStatement);
+                case ReturnStatement returnStatement:
+                    ReturnStatement(returnStatement);
+                    break;
 
-            else if (ast is LogicalOr logicalOr)
-                LogicalOr(logicalOr);
+                case LogicalOr logicalOr:
+                    LogicalOr(logicalOr);
+                    break;
 
-            else if (ast is LogicalAnd logicalAnd)
-                LogicalAnd(logicalAnd);
+                case LogicalAnd logicalAnd:
+                    LogicalAnd(logicalAnd);
+                    break;
 
-            else if (ast is Equality equality)
-                Equality(equality);
+                case Equality equality:
+                    Equality(equality);
+                    break;
 
-            else if (ast is Concatenation concatenation)
-                Concatenation(concatenation);
+                case Concatenation concatenation:
+                    Concatenation(concatenation);
+                    break;
 
-            else if (ast is Relational relational)
-                Relational(relational);
+                case Relational relational:
+                    Relational(relational);
+                    break;
 
-            else if (ast is Expression expression)
-                Expression(expression);
+                case Expression expression:
+                    Expression(expression);
+                    break;
 
-            else if (ast is Term term)
-                Term(term);
+                case Term term:
+                    Term(term);
+                    break;
 
-            else if (ast is Unary unary)
-                Unary(unary);
+                case Unary unary:
+                    Unary(unary);
+                    break;
 
-            else if (ast is NumberValue numberValue)
-                NumberValue(numberValue);
+                case NumberValue value:
+                    NumberValue(value);
+                    break;
 
-            else if (ast is StringValue stringValue)
-                StringValue(stringValue);
+                case StringValue value:
+                    StringValue(value);
+                    break;
 
-            else if (ast is UserDefinedValue userDefinedValue)
-                UserDefinedValue(userDefinedValue);
+                case UserDefinedValue value:
+                    UserDefinedValue(value);
+                    break;
+
+            }
         }
 
         // Node evaluating methods
@@ -645,18 +669,25 @@ namespace Dutal.Interpreter.Evaluating
         private void UserDefinedValue(UserDefinedValue userDefinedValue)
         {
             string key = userDefinedValue.UserDefinedValueName;
+
             if (Variables.ContainsKey(key))
             {
                 Variable variable = Variables[key];
 
-                if (variable is StringType stringType)
-                    Registers.SetString(stringType.Value);
+                switch(variable)
+                {
+                    case StringType stringType:
+                        Registers.SetString(stringType.Value);
+                        break;
 
-                else if (variable is NumberType numberType)
-                    Registers.SetNumber(numberType.Value);
+                    case NumberType numberType:
+                        Registers.SetNumber(numberType.Value);
+                        break;
 
-                else if (variable is TreeType treeType)
-                    Registers.SetTree(treeType.Value);
+                    case TreeType treeType:
+                        Registers.SetTree(treeType.Value);
+                        break;
+                }
             }
             else
                 throw new EvaluatorException($"Variable with name {key}", location);

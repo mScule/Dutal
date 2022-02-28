@@ -6,7 +6,7 @@ namespace Dutal.Interpreter.Evaluating
 {
     class Registers
     {
-        private Location location;
+        private readonly Location location;
 
         private string? stringRegister;
         private float?  numberRegister;
